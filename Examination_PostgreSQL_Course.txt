@@ -1,0 +1,71 @@
+Examination Part|
+1) การใช้คำสั่ง TRUNCATE TABLE someTable RESTART IDENTITY; มีผลทำให้ column identity column (id serial primary key) ถูก reset เริ่มนับใหม่ใช่หรือไม่	
+
+2) จาก syntax DROP TABLE นี้ถูกต้องแล้วหรือยัง และหมายถึงอะไรจงอธิบาย 
+DROP TABLE IF EXIST authors;  
+
+3) จาก syntax select into table นี้มีข้อมูลอยู่ใน table films อยู่แต่ถ้าไม่มี table ชื่อ films_recent อยู่เลยจะเกิด error หรือไม่เพราะอะไรจงอธิบาย 
+SELECT * INTO films_recent FROM films WHERE date_prod >= '2022-01-01';
+
+4) จงบอกวิธีในการ import Json data ไปยัง Json Column มาสัก 1 วิธี
+
+5) จาก syntax select ค่าผลลัพธ์ที่ได้คืออะไร
+SELECT replace('A favourite song from rhyme time at the library we took the kids to was Teddy Bear Teddy Bear 
+so this Dinosaur Song which is sung to the same rhyme is great. Dinosaur, dinosaur, turn around! Dinosaur, dinosaur, 
+stomp the ground! Dinosaur, dinosaur, make some claws!', 'Dinosaur', 'XXXXXXXX’);
+
+6) จาก syntax select ค่าผลลัพธ์ที่ได้คืออะไร
+SELECT regexp_replace('A favourite song from rhyme time at the library we took the kids to was Teddy Bear Teddy Bear 
+so this Dinosaur Song which is sung to the same rhyme is great. Dinosaur, dinosaur, turn around! Dinosaur, dinosaur, 
+stomp the ground! Dinosaur, dinosaur, make some claws!', 'Dinosaur', 'XXXXXXXX’, 'gi');
+
+
+7) จาก sybtax select จาก table staff นี้ข้อมูลผลลัพธ์ที่ได้ออกมามีทั้งหมดกี่ rows (records)
+create table staff(   id int primary key,  name varchar(50),  skills text,  skills_a text[],  skills_j jsonb );
+insert into staff(id, name, skills) values
+    (1, 'Peter', 'C|Java|SQL'),
+    (2, 'Jane', 'C++|Python'),
+    (3, 'Ann', 'Word|Excel|PowerPoint'),
+    (4, 'Bruce', 'Swift|Objective-C|Word|Excel|PowerPoint’);
+
+select * from staff where 'C' = any(skills_a);
+
+
+8) การ Join Table ที่ใช้เทคนิครวมตารางเข้ากับตัวเองเพื่อสืบค้นข้อมูลแบบลำดับชั้น และเพื่อเปรียบเทียบแถวภายในตารางเดียวกันโดยจะต้องระบุตารางเดียวกัน 2 ครั้งแบบใช้ table aliases ที่แตกต่างกันใน select query เรียกว่าอะไร
+
+
+9) จาก syntax UNION ALL ข้างล่างถ้า table top_rated_films มี 40 rows และ  most_popular_films มี 30 rows ผลลัพธ์ที่ได้จะมีทั้งหมดกี่ rows (records)
+SELECT * FROM top_rated_films  UNION ALL  SELECT * FROM most_popular_films  ORDER BY title;
+
+
+10) syntax จาก query ข้างล่างนี้ถูกต้องแล้วหรือไม่ และผลลัพธ์ที่ได้คืออะไร
+WITH RECURSIVE t(n) AS (
+    VALUES (1)
+  UNION ALL
+    SELECT n+1 FROM t WHERE n < 1000;
+)
+SELECT sum(n) FROM t;
+
+
+Part|| : ทดสอบเขียนโปรแกรม ตัด Grade โดยกำหนด numrage data type ให้ประกอบไปด้วย 
+	score >= 90 'A'				--greater than and equal 90
+	score < 90 to 85 'B+'		--greater than and equal 85 to less than 90
+	score < 85 to 75 'B'		--greater than and equal 75 to less than 85
+	score < 75 to 65 'C+'		--greater than and equal 65 to less than 75
+	score < 65 to 55 'C'		--greater than and equal 55 to less than 65
+	score < 55 to 45 'D'		--greater than and equal 45 to less than 55
+	score < 45 'F'				--less than 45
+
+       
+โดยจะมี script ให้ CREATE TABLE ที่ชื่อว่า scores ใน comment ดังนี้
+
+/*
+DROP TABLE IF EXISTS scores;
+
+SELECT 
+    s student_id, floor(random() * (100-40+1) + 40)::numeric(5,2) score, NULL::varchar(2) grade
+	into scores
+    FROM generate_series(1,30) AS s;
+
+SELECT student_id, score, grade from scores;
+*/
